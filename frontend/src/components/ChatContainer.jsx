@@ -89,18 +89,19 @@ const ChatContainer = () => {
     <div className="flex-1 flex flex-col overflow-auto relative">
       <ChatHeader />
       {/* <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-base bg-[url(../public/ChatAppBG.png)]"> */}
-      <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-base-100">
+      <div className="flex-1 overflow-y-auto p-2 sm:p-4 space-y-4 bg-base-100">
         {messages
           .filter((m) => !hiddenMessages.has(m._id))
           .map((message) => (
             <div
               key={message._id}
-              className={`chat ${message.senderId === authUser._id ? "chat-end" : "chat-start"}`}
+              className={`chat  gap-1 ${message.senderId === authUser._id ? "chat-end" : "chat-start"}`}
               ref={messageEndRef}
             >
               {/* Avatar */}
-              <div className="chat-image avatar">
-                <div className="size-10 rounded-full border">
+              <div className={`chat-image avatar sm:block ${message.senderId === authUser._id ? "hidden" : ""}`}>
+
+                <div className="size-9 sm:size-10 rounded-full border">
                   <img
                     src={
                       message.senderId === authUser._id
@@ -113,17 +114,13 @@ const ChatContainer = () => {
               </div>
 
               {/* Timestamp */}
-              <div className="chat-header mb-1">
-                <time className="text-xs opacity-50 ml-1">
-                  {formatMessageTime(message.createdAt)}
-                </time>
-              </div>
+
 
               {/* Bubble */}
               <div
-                className={`chat-bubble relative flex flex-col ${message.senderId === authUser._id
+                className={`chat-bubble max-w-[80%] sm:max-w-screen-sm relative flex flex-col break-words  whitespace-pre-wrap min-w-0  ${message.senderId === authUser._id
                   ? "bg-primary text-primary-content"
-                  : "bg-base-200 text-base-content"
+                  : "bg-secondary text-secondary-content "
                   }`}
               >
                 {message.image && (
@@ -137,23 +134,32 @@ const ChatContainer = () => {
                 )}
                 {message.text && <p>{message.text}</p>}
 
-                {/* Status checks for sent messages */}
-                {message.senderId === authUser._id && (
-                  <span className="text-xs text-gray-500 text-right mt-1">
-                    {message.status === "sent" && "✓"}
-                    {message.status === "delivered" && "✓✓"}
-                    {message.status === "read" && <span className="text-base-300">✓✓</span>}
-                  </span>
-                )}
+                <div className={`flex gap-2 mt-1 ${message.senderId === authUser._id ? "justify-end" : "justify-start"
+                  }`}>
+
+                  <time className="text-xs opacity-75">
+                    {formatMessageTime(message.createdAt)}
+                  </time>
+
+                  {/* Status checks for sent messages */}
+                  {message.senderId === authUser._id && (
+                    <span className="text-xs text-gray-500 text-right">
+                      {message.status === "sent" && "✓"}
+                      {message.status === "delivered" && "✓✓"}
+                      {message.status === "read" && <span className="text-base-300">✓✓</span>}
+                    </span>
+                  )}
+                </div>
+
 
                 <div
-                  className={`absolute dropdown top-1/2 transform -translate-y-1/2 text-base-content ${message.senderId === authUser._id
-                    ? "dropdown-left -left-7"
-                    : "dropdown-right -right-7 "
+                  className={`absolute dropdown z-10 top-1/2 transform -translate-y-1/2 text-base-content ${message.senderId === authUser._id
+                    ? "dropdown-bottom sm:dropdown-left -left-7"
+                    : "dropdown-end sm:dropdown-right -right-7 "
                     }`}
                 >
                   {/* trigger */}
-                  <div tabIndex={0} className="btn rounded-full btn-sm btn-ghost p-1">
+                  <div tabIndex={0} className=" btn rounded-full btn-sm btn-ghost p-1">
                     <ChevronDown size={18} />
 
                   </div>
@@ -161,14 +167,14 @@ const ChatContainer = () => {
                   {/* menu */}
                   <ul
                     tabIndex={0}
-                    className="dropdown-content menu bg-base-100 rounded-box z-[1] w-40 p-1 shadow relative"
+                    className="dropdown-content menu bg-base-100 rounded-box z-11 w-36 sm:w-40 p-1 shadow relative"
                   >
 
                     {/* Download Image (if image exists) */}
                     {message.image && (
                       <li>
                         <button
-                          className="flex items-center gap-2 w-full px-2 py-1 hover:bg-base-200 rounded"
+                          className="flex z-12 items-center gap-2 w-full px-2 py-1 hover:bg-base-200 rounded"
                           onClick={() => downloadImage(message.image)}
                         >
                           <Download className="w-4 h-4" />
@@ -181,7 +187,7 @@ const ChatContainer = () => {
                     {message.text && (
                       <li>
                         <button
-                          className="flex items-center gap-2 w-full px-2 py-1 hover:bg-base-200 rounded"
+                          className="flex z-12 items-center gap-2 w-full px-2 py-1 hover:bg-base-200 rounded"
                           onClick={() => navigator.clipboard.writeText(message.text)}
                         >
                           <Copy className="w-4 h-4" />
@@ -193,7 +199,7 @@ const ChatContainer = () => {
 
                     <li>
                       <button
-                        className="flex items-center gap-2 w-full px-2 py-1 hover:bg-base-200 rounded"
+                        className="flex z-12 items-center gap-2 w-full px-2 py-1 hover:bg-base-200 rounded"
                         onClick={() => {
                           setHiddenMessages((s) => new Set(s).add(message._id));
                         }}
