@@ -95,13 +95,13 @@ const ChatContainer = () => {
           .map((message) => (
             <div
               key={message._id}
-              className={`chat  gap-1 ${message.senderId === authUser._id ? "chat-end" : "chat-start"}`}
+              className={`chat  gap-2 ${message.senderId === authUser._id ? "chat-end" : "chat-start"}`}
               ref={messageEndRef}
             >
               {/* Avatar */}
-              <div className={`chat-image avatar sm:block ${message.senderId === authUser._id ? "hidden" : ""}`}>
+              <div className={`chat-image avatar sm:block ${message.senderId === authUser._id ? "hidden mb-1" : "mb-3.5"}`}>
 
-                <div className="size-9 sm:size-10 rounded-full border">
+                <div className="size-9 sm:size-10  rounded-full border ">
                   <img
                     src={
                       message.senderId === authUser._id
@@ -153,13 +153,13 @@ const ChatContainer = () => {
 
 
                 <div
-                  className={`absolute dropdown z-10 top-1/2 transform -translate-y-1/2 text-base-content ${message.senderId === authUser._id
-                    ? "dropdown-bottom sm:dropdown-left -left-7"
+                  className={`absolute dropdown dropdown-top z-30 top-1/2 transform -translate-y-1/2 text-base-content ${message.senderId === authUser._id
+                    ? "sm:dropdown-left  -left-7"
                     : "dropdown-end sm:dropdown-right -right-7 "
                     }`}
                 >
                   {/* trigger */}
-                  <div tabIndex={0} className=" btn rounded-full btn-sm btn-ghost p-1">
+                  <div tabIndex={0} role="button"  className=" btn rounded-full btn-sm btn-ghost p-1  z-0">
                     <ChevronDown size={18} />
 
                   </div>
@@ -167,14 +167,14 @@ const ChatContainer = () => {
                   {/* menu */}
                   <ul
                     tabIndex={0}
-                    className="dropdown-content menu bg-base-100 rounded-box z-11 w-36 sm:w-40 p-1 shadow relative"
+                    className="dropdown-content menu z-[99] bg-base-100 rounded-box w-36 sm:w-40 p-1 shadow relative"
                   >
 
                     {/* Download Image (if image exists) */}
                     {message.image && (
                       <li>
                         <button
-                          className="flex z-12 items-center gap-2 w-full px-2 py-1 hover:bg-base-200 rounded"
+                          className="flex  items-center gap-2 w-full px-2 py-1 hover:bg-base-200 rounded"
                           onClick={() => downloadImage(message.image)}
                         >
                           <Download className="w-4 h-4" />
@@ -182,12 +182,12 @@ const ChatContainer = () => {
                         </button>
                       </li>
                     )}
-                    {/* Inside your dropdown <ul> */}
+                    
                     {/* Copy Text (if text exists) */}
                     {message.text && (
-                      <li>
+                      <li >
                         <button
-                          className="flex z-12 items-center gap-2 w-full px-2 py-1 hover:bg-base-200 rounded"
+                          className="flex   items-center gap-2 w-full px-2 py-1 hover:bg-base-200 rounded"
                           onClick={() => navigator.clipboard.writeText(message.text)}
                         >
                           <Copy className="w-4 h-4" />
@@ -199,7 +199,7 @@ const ChatContainer = () => {
 
                     <li>
                       <button
-                        className="flex z-12 items-center gap-2 w-full px-2 py-1 hover:bg-base-200 rounded"
+                        className="flex   items-center gap-2 w-full px-2 py-1 hover:bg-base-200 rounded"
                         onClick={() => {
                           setHiddenMessages((s) => new Set(s).add(message._id));
                         }}

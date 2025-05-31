@@ -9,8 +9,8 @@ const HomePage = () => {
 
   return (
     <div className="h-screen bg-base-200 ">
-      <div className="flex items-center justify-center pt-16 ">
-        <div className="bg-base-100  w-full" style={{height:'89dvh'}}>
+      <div className="flex items-center justify-center pt-12">
+        <div className="bg-base-100  w-full" style={{height:'calc(100dvh - 3rem)'}}>
           <div className="flex h-full rounded-lg overflow-hidden">
             <Sidebar />
 

@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useChatStore } from "../store/useChatStore";
 import { useAuthStore } from "../store/useAuthStore";
 import SidebarSkeleton from "./skeletons/SidebarSkeleton";
-import { Menu, X,Search } from "lucide-react";
+import { Menu, X, Search } from "lucide-react";
 import axios from "axios";
 
 const Sidebar = () => {
@@ -76,27 +76,50 @@ const Sidebar = () => {
               <Menu strokeWidth={3} className="block lg:hidden size-6" />)}
           </button>
         </div>
-        <div className={` ${sidebarExpanded ? "lg:block" : "hidden lg:block"} m-1 flex gap-3`}>
-          <input
-            type="text"
-            value={searchInput}
-            onChange={(e) => setSearchInput(e.target.value)}
-            placeholder="username"
-            className="input input-sm w-9/12 input-bordered input-accent max-w-xs flex-1 mx-1 border-solid focus:outline-none"
-            onKeyDown={(e) => e.key === "Enter" && handleSearch()}
-          />
+        <div className={`flex m-1 gap-2 ${sidebarExpanded ? "" : "hidden lg:flex"} `}>
+
+          <div className="relative w-9/12 max-w-xs flex-1">
+            <input
+              type="text"
+              value={searchInput}
+              onChange={(e) => {
+                setSearchInput(e.target.value);
+ 
+                if (searchError) setSearchError("");
+              }}
+              placeholder="username"
+              className="input input-sm w-full input-bordered input-accent pr-8 focus:outline-none"
+              onKeyDown={(e) => e.key === "Enter" && handleSearch()}
+            />
+
+             {searchInput && (
+              <button
+                type="button"
+                onClick={() => {
+                  setSearchInput("");
+                  setSearchError("");
+                }}
+                className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700"
+              >
+                ×
+              </button>
+            )}
+          </div>
+          <div>
+
           <button
             onClick={handleSearch}
             disabled={isSearching || !searchInput.trim()}
             className="btn btn-sm btn-accent"
-          >
+            >
             {isSearching ? "..." : <Search className={`size-3 ${isSearching || !searchInput.trim() ? "text-accent" : "text-secondory"}`} strokeWidth={3} />}
           </button>
+            </div>
         </div>
-        {searchError && (
-          <div className="text-red-500 text-xs m-1">{searchError}</div>
-        )}
       </div>
+      {searchError && (
+        <div className="text-red-500 text-xs m-1">{searchError}</div>
+      )}
 
       {/* List */}
       <div className="overflow-y-auto flex-1 ">
@@ -138,7 +161,7 @@ const UserButton = ({ user, isSelected, online, onClick, sidebarExpanded }) => (
         <span className="absolute bottom-0 right-0 size-3 bg-green-500 rounded-full ring-2 ring-zinc-900" />
       )}
     </div>
-    <div className={ ` ${sidebarExpanded ? "lg:block" : "hidden lg:block"} truncate`}>
+    <div className={` ${sidebarExpanded ? "lg:block" : "hidden lg:block"} truncate`}>
       {user.fullName}
     </div>
   </button>
